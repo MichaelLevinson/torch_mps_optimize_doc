@@ -1,9 +1,6 @@
-````markdown
 # Optimizing PyTorch 2.7 for MPS (Metal Performance Shaders) on Apple Silicon
 
 PyTorch's Metal Performance Shaders (MPS) backend enables deep learning workloads to leverage Apple's GPU hardware on M1, M2, M3, and M4 devices. This report provides a comprehensive analysis of optimizations, limitations, and best practices for maximizing performance with PyTorch 2.7 on Apple Silicon.
-
----
 
 ## Memory Management Optimizations
 
@@ -22,7 +19,7 @@ os.environ["PYTORCH_MPS_LOW_WATERMARK_RATIO"] = "1.2"   # Default: 1.4
 # Option 2: Use the API
 import torch
 torch.mps.set_per_process_memory_fraction(0.9)  # Use up to 90% of available memory
-````
+```
 
 ### Memory Release Mechanisms
 
@@ -32,8 +29,6 @@ torch.mps.empty_cache()
 ```
 
 Use this especially after large operations or between epochs to prevent memory fragmentation.
-
----
 
 ## Performance Optimization Techniques
 
@@ -73,8 +68,6 @@ for i, (inputs, targets) in enumerate(loader):
         optimizer.zero_grad()
 ```
 
----
-
 ### Manual Mixed Precision
 
 MPS lacks full AMP support. This is the manual alternative:
@@ -86,8 +79,6 @@ with torch.autocast(device_type="mps", dtype=torch.float16, enabled=False):
     loss = loss_fn(outputs, targets.to("mps"))
 loss.backward()
 ```
-
----
 
 ## Known Limitations and Workarounds
 
@@ -103,8 +94,6 @@ for k in model_data:
 model_data = model_data.to("mps")
 ```
 
----
-
 ### Data Loading
 
 Avoid `pin_memory=True` for MPS:
@@ -115,8 +104,6 @@ dataloader = DataLoader(dataset, batch_size=32)
 inputs = inputs.to("mps", non_blocking=True)
 ```
 
----
-
 ### MPS Fallback
 
 To allow CPU fallback:
@@ -126,19 +113,15 @@ import os
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 ```
 
----
-
 ## Operator Support Status
 
-Many operations are still not supported on MPS (e.g., grid\_sampler\_3d, some linear algebra ops). Use:
+Many operations are still not supported on MPS (e.g., grid_sampler_3d, some linear algebra ops). Use:
 
 ```python
 os.environ["PYTORCH_MPS_LOG_LEVEL"] = "1"
 ```
 
 To log fallbacks when running a model.
-
----
 
 ## Profiling and Analysis
 
@@ -157,8 +140,6 @@ if torch.mps.is_metal_capture_enabled():
         output = model(input_tensor)
 ```
 
----
-
 ## `torch.compile` on MPS (PyTorch 2.7)
 
 Still experimental:
@@ -168,8 +149,6 @@ model = torch.compile(model, backend="mps")
 ```
 
 Known issues: operator fallbacks, shader generation bugs. Stable support expected in PyTorch 2.8+.
-
----
 
 ## Conclusion
 
@@ -182,4 +161,5 @@ To optimize PyTorch on MPS:
 * Profile fallbacks and memory pressure via logging and Metal tools
 
 MPS support is improving steadily — but still requires targeted optimization on Apple Silicon.
-````
+
+<!-- NOTE FOR AI CODING AGENTS: To use this file in your workflow, save it as `docs/optimizeMPS.md`. Read it before configuring models for MPS execution. Confirm understanding with the user. -->
