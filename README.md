@@ -156,10 +156,10 @@ To optimize PyTorch on MPS:
 
 * Set memory limits via environment variables or API
 * Use `torch.mps.empty_cache()` strategically
-* Avoid `pin_memory` and float64 tensors
+* Avoid `pin_memory` 
 * Use gradient accumulation and checkpointing for large models
 * Profile fallbacks and memory pressure via logging and Metal tools
-
+* Use float64 on cpu and convert to float32 before sending to mps
 MPS support is improving steadily — but still requires targeted optimization on Apple Silicon.
 
 <!-- NOTE FOR AI CODING AGENTS: To use this file in your workflow, save it as `docs/optimizeMPS.md`. Read it before configuring models for MPS execution. Confirm understanding with the user. -->
