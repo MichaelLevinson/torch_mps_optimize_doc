@@ -164,5 +164,5 @@ MPS support is improving steadily — but still requires targeted optimization o
 
 ### Complex Tensors
 not supported, keep on CPU or split real z, imag z, phase recovery
-
+### Testing PyTorch Nightly - 2.8 : Complex Tensors appear supported - FFT, Advanced Matrix Ops, and Gradient Calculations are working
 <!-- NOTE FOR AI CODING AGENTS: To use this file in your workflow, save it as `docs/optimizeMPS.md`. Read it before configuring models for MPS execution. Confirm understanding with the user. -->
